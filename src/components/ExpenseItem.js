@@ -4,7 +4,7 @@ import {MdEdit, MdDelete} from 'react-icons/md';
 //JSX se pravat <li> koi se spojuvaat vo ExpenseList vo <ul> od tamu se prikazuva cela lista vo App
 const ExpenseItem = ({expense}) => {
     const {id, charge, amount} = expense;
-    console.log(charge);
+    
     return (
         <li className="item">
         <div className="info">
