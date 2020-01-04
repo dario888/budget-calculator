@@ -3,7 +3,7 @@ import {MdSend} from 'react-icons/md'
 
 
 const ExpenseForm = (props) => {
-    const {amount, charge, amountHendler, chargeHendler, submitHendler} = props;
+    const {amount, charge, amountHendler, chargeHendler, submitHendler, edit} = props;
    
 
     return (
@@ -33,7 +33,7 @@ const ExpenseForm = (props) => {
                 </div>
             </div>
             <button type="submit" className="btn">
-                submit
+                {edit?'edit':'submit'}
                 <MdSend className="btn-icon" />
             </button>
         </form>

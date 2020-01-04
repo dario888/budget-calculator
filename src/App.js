@@ -18,6 +18,8 @@ function App() {
   const [charge, setCharge] = useState('');
   const [amount, setAmount] = useState('');
   const [alert, setAlert] = useState({show: false});
+  const [edit, setEdit] = useState(false);
+  const [id, setId] = useState(0);
 
   const chargeHendler = event => {
     setCharge(event.target.value);
@@ -44,9 +46,20 @@ function App() {
     }
     //expenses=initialExpenses
     if(charge !== '' && amount !== ''){
-      const singleEcxpense = {id: uuid(), charge: charge, amount: amount}
-      setExpenses([...expenses, singleEcxpense]);
-      alertHendler({type: 'success', text: 'Item added'})
+      if(edit){
+        let tempExpenses = expenses.map(item => {
+          return item.id === id ? {...item, charge: charge, amount:amount} : item
+        });
+        setExpenses(tempExpenses);
+        setEdit(false);
+        alertHendler({type: 'success', text: 'Item Edited'})
+
+      } else {
+        const singleEcxpense = {id: uuid(), charge: charge, amount: amount}
+        setExpenses([...expenses, singleEcxpense]);
+        alertHendler({type: 'success', text: 'Item added'})
+
+      }
       setCharge('');
       setAmount('');
 
@@ -56,6 +69,24 @@ function App() {
 
     }
     
+  }
+
+  const deleteHendler = ID => {
+    let expencesFilter = expenses.filter(expence => expence.id !== ID) 
+    
+    setExpenses( expencesFilter );
+
+  }
+  const editHendler = ID => {
+    let expense = expenses.find(item => item.id === ID);
+    let {charge, amount} = expense;
+    setCharge(charge);
+    setAmount(amount);
+    setEdit(true);
+    setId(ID);
+  }
+  const clearItems = () => {
+    setExpenses([]);
   }
 
   return (
@@ -69,8 +100,13 @@ function App() {
       charge={charge}
       amountHendler={amountHendler}
       chargeHendler={chargeHendler}
-      submitHendler={submitHendler} /> 
-      <List expenses={expenses} />
+      submitHendler={submitHendler}
+      edit={edit} /> 
+      <List 
+      expenses={expenses}
+      deleteHendler={deleteHendler} 
+      editHendler={editHendler} 
+      clearItems={clearItems} />
       </main>
         <h1>
           total spending : <span className="total">
