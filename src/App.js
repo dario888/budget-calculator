@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Form from './components/ExpenseForm';
 import List from './components/ExpenseList';
@@ -6,11 +6,14 @@ import Alert from './components/Alert';
 import uuid from 'uuid/v4';
 
 
-const initialExpenses = [
-  {id: uuid(), charge: 'rent', amount: 1600},
-  {id: uuid(), charge: 'car payment', amount: 400},
-  {id: uuid(), charge: 'credidt card bill', amount: 1200}
-];
+// const initialExpenses = [
+//   {id: uuid(), charge: 'rent', amount: 1600},
+//   {id: uuid(), charge: 'car payment', amount: 400},
+//   {id: uuid(), charge: 'credidt card bill', amount: 1200}
+// ];
+
+const initialExpenses = localStorage.getItem('expenses') 
+? JSON.parse(localStorage.getItem('expenses')) : [];
 
 function App() {
   //STATES
@@ -20,6 +23,11 @@ function App() {
   const [alert, setAlert] = useState({show: false});
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(0);
+
+// set the state in localstorage
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses))
+  },[expenses]);
 
   const chargeHendler = event => {
     setCharge(event.target.value);
@@ -40,10 +48,6 @@ function App() {
 
   const submitHendler = event => {
     event.preventDefault();
-    if(charge !== 'rent' && charge !== 'car payment' && charge !== 'credidt card bill'){
-      return alertHendler({type: 'danger', 
-      text: 'Please enter correct charge'});
-    }
     //expenses=initialExpenses
     if(charge !== '' && amount !== ''){
       if(edit){
