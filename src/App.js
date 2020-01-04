@@ -17,23 +17,42 @@ function App() {
   const [expenses, setExpenses] = useState(initialExpenses);
   const [charge, setCharge] = useState('');
   const [amount, setAmount] = useState('');
+  const [alert, setAlert] = useState({show: false});
 
   const chargeHendler = event => {
-    setCharge(event.target.value)
+    setCharge(event.target.value);
   }
 
   const amountHendler = event => {
-    setAmount(event.target.value)
+    setAmount(event.target.value);
+  }
+  // + 2 properties type, text
+  const alertHendler = ({type, text}) => {
+    setAlert({show:true, type: type, text: text});
+
+    setTimeout(()=>{
+      setAlert({show: false})
+    },5000);
+
   }
 
   const submitHendler = event => {
     event.preventDefault();
+    if(charge !== 'rent' && charge !== 'car payment' && charge !== 'credidt card bill'){
+      return alertHendler({type: 'danger', 
+      text: 'Please enter correct charge'});
+    }
     //expenses=initialExpenses
     if(charge !== '' && amount !== ''){
       const singleEcxpense = {id: uuid(), charge: charge, amount: amount}
       setExpenses([...expenses, singleEcxpense]);
+      alertHendler({type: 'success', text: 'Item added'})
       setCharge('');
       setAmount('');
+
+    } else {
+      alertHendler({type: 'danger', 
+      text: 'charge can\'t be empty value and amount value has to be bigger than'});
 
     }
     
@@ -41,6 +60,7 @@ function App() {
 
   return (
     <>
+      {alert.show && <Alert type={alert.type} text={alert.text} />}
       <Alert />
       <h1>budget calculator</h1>
       <main className="App">
