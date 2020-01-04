@@ -27,8 +27,16 @@ function App() {
   }
 
   const submitHendler = event => {
-    event.preventDefault()
-    console.log(charge,amount);
+    event.preventDefault();
+    //expenses=initialExpenses
+    if(charge !== '' && amount !== ''){
+      const singleEcxpense = {id: uuid(), charge: charge, amount: amount}
+      setExpenses([...expenses, singleEcxpense]);
+      setCharge('');
+      setAmount('');
+
+    }
+    
   }
 
   return (
@@ -47,7 +55,7 @@ function App() {
         <h1>
           total spending : <span className="total">
             $ {expenses.reduce((acc,crv) => {
-              return acc += crv.amount
+              return acc += +crv.amount
             }, 0)}
           </span>
         </h1>
